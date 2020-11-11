@@ -1,0 +1,10 @@
+runtime: python38
+
+handlers:
+  - url: /.*\.(js)
+    static_files: logic.js
+    upload: logic.js
+
+  - url: /.*
+    static_files: index.html
+    upload: index.html
