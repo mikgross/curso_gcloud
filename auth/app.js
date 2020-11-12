@@ -7,13 +7,13 @@ const app = express();
 const firebase = require('firebase');
 const bodyParser = require('body-parser');
 const appFire = firebase.initializeApp({
-    apiKey: "AIzaSyA__1_AJ3I-BHcFvonJV0cL4P9yhaanlJ8",
-    authDomain: "clase-11-11-2020.firebaseapp.com",
-    databaseURL: "https://clase-11-11-2020.firebaseio.com",
-    projectId: "clase-11-11-2020",
-    storageBucket: "clase-11-11-2020.appspot.com",
-    messagingSenderId: "95065504063",
-    appId: "1:95065504063:web:bfc4e0bd26209799b43b8a"
+    apiKey: "AIzaSyCuI1jFSy5Wt5kWx6SboaMvRZYhQs8ahUU",
+    authDomain: "clase-12-11-2020.firebaseapp.com",
+    databaseURL: "https://clase-12-11-2020.firebaseio.com",
+    projectId: "clase-12-11-2020",
+    storageBucket: "clase-12-11-2020.appspot.com",
+    messagingSenderId: "428779476475",
+    appId: "1:428779476475:web:8a955898925c08f362e75e"
 });
 
 app.use(cors());
