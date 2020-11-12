@@ -10,7 +10,7 @@ window.addEventListener('load', (event) => {
     }
 
     function formFinanceData() {
-        const transactions = getData('https://finance-dot-clase-11-11-2020.ew.r.appspot.com/transactions');
+        const transactions = getData('https://finance-dot-clase-12-11-2020.ew.r.appspot.com/transactions');
         const parsedData = JSON.parse(transactions);
         var styledTransactions = '';
         const transactionsHeader = 
@@ -33,7 +33,7 @@ window.addEventListener('load', (event) => {
     }
 
     function formDepartmentData() {
-        const departments = getData('https://departments-dot-clase-11-11-2020.ew.r.appspot.com/departments');
+        const departments = getData('https://departments-dot-clase-12-11-2020.ew.r.appspot.com/departments');
         const parsedDepartments = JSON.parse(departments);
 
         var styledDeps = '';
@@ -64,7 +64,7 @@ window.addEventListener('load', (event) => {
         document.getElementById('messageDisplay').innerHTML = '';
 
         var xmlHttp = new XMLHttpRequest();
-        xmlHttp.open('POST', 'https://auth-dot-clase-11-11-2020.ew.r.appspot.com/user-signin', true);
+        xmlHttp.open('POST', 'https://auth-dot-clase-12-11-2020.ew.r.appspot.com/user-signin', true);
 
         const email = document.getElementById('email').value;
         const password = document.getElementById('password').value;
@@ -92,7 +92,7 @@ window.addEventListener('load', (event) => {
         document.getElementById('messageDisplay').innerHTML = '';
 
         var xmlHttp = new XMLHttpRequest();
-        xmlHttp.open('POST', 'https://auth-dot-clase-11-11-2020.ew.r.appspot.com/create-user', true);
+        xmlHttp.open('POST', 'https://auth-dot-clase-12-11-2020.ew.r.appspot.com/create-user', true);
 
         const email = document.getElementById('emailReg').value;
         const password = document.getElementById('passwordReg').value;
