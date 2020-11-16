@@ -1,64 +1,52 @@
 'use strict';
 
 const express = require('express');
-const cors = require('cors');
+const cors = require('cors')
 const bodyParser = require('body-parser');
 const { PubSub } = require('@google-cloud/pubsub');
 
-const projectId = 'clase-12-11-2020';
-const topicName = 'nueva-transacciones';
+const projectId = 'clase-11-11-2020'
+const topicName = 'new-transactions';
 
-const pubsub = new PubSub({
-    projectId: projectId
-});
-
+const pubsub = new PubSub({projectId});
 const app = express();
 
 app.use(cors());
 app.use(bodyParser.json());
 
 app.get('/', (req, res) => {
-    res.status(200).send('Servicio pubsub desplegado!').end();
-})
+  res.status(200).send('Servicio pub/sub').end();
+});
 
-app.post('/post-transaction', async (req, res) => {
+app.post('/post-message', async (req, res) => {
 
+    // const transaction = req.body.transaction;
     const transaction = {
-        id: req.body.id,
-        sender: req.body.sender,
-        receiver: req.body.receiver,
-        amount: req.body.amount
+        id: 3,
+        sender: 'account 20',
+        receiver: 'account 40',
+        amount: 19870
     };
 
     const dataBuffer = Buffer.from(JSON.stringify(transaction));
 
     try {
         const messageId = await pubsub.topic(topicName).publish(dataBuffer);
-        console.log(`Message ${messageId} published successfuly!`);
-        res.status('200').send(`{"status": "success", "messagId": ${messageId}}`).end();
+        console.log(`Message ${messageId} published.`);
+        res.status(200).send(`Message ${messageId} published.`).end();
         return;
     } catch (error) {
-        console.log(`Error ${error}`);
-        res.status('400').send(`{"status": "error", "messagId": null}`).end();
-        return;
-    }
-
-});
-
-app.get('/list-messages', async (req, res) => {
-    const subscription = pubsub.subscription('projects/clase-12-11-2020/subscriptions/Test-Gcloud_Sub');
-    try {
-        const messages = await subscription.get();
-        res.status(200).send(JSON.stringify(messages.entries)).end();
-        return;   
-    } catch (error) {
-        res.status(400).send(JSON.stringify(error)).end();
+        console.error(`Received error while publishing: ${error.message}`);
+        res.status(400).send(`Received error while publishing: ${error.message}`).end();
         return;
     }
 });
 
-app.listen(8080, () => {
-    console.log('Service started!');
+const PORT = process.env.PORT || 8080;
+app.listen(PORT, () => {
+  console.log(`App listening on port ${PORT}`);
+  console.log(`This message is seen in the logs`);
+  console.log('Press Ctrl+C to quit.');
 });
 
 module.exports = app;
