@@ -1,0 +1,6 @@
+runtime: nodejs
+env: flex
+
+endpoints_api_service:
+  name: clase-16-11-2020-295816.appspot.com
+  rollout_strategy: managed

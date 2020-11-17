@@ -1,0 +1,66 @@
+
+
+
+swagger: "2.0"
+info:
+  description: "API to serve information from our finance department"
+  title: "Finance API"
+  version: "0.0.2"
+host: "clase-16-11-2020-295816.appspot.com"
+consumes:
+- "application/json"
+produces:
+- "application/json"
+schemes:
+- "https"
+paths:
+  "/":
+    get:
+      description: "Gives back the name of the service"
+      operationId: "helloWorld"
+      produces:
+      - "application/json"
+      responses:
+        200:
+          description: "The message"
+          schema:
+            $ref: "#/definitions/helloWorldMessage"
+  "/transactions":
+    post:
+      description: "Gives back a set of transactions"
+      operationId: "transac"
+      produces:
+      - "application/json"
+      responses:
+        200:
+          description: "Transactions received from the last two months"
+          schema:
+            $ref: "#/definitions/transactionExtraction"
+      parameters:
+      - description: "Type of transaction"
+        in: body
+        name: type
+        required: true
+        schema:
+          $ref: "#/definitions/transactionExtraction"
+definitions:
+  helloWorldMessage:
+    type: "object"
+    properties:
+      message:
+        type: "string"
+  transactionExtraction:
+    type: "object"
+    properties:
+      id:
+        type: "string"
+      transactions:
+        type: "string"
+security:
+- api_key: []
+securityDefinitions:
+  # This section configures basic authentication with an API key.
+  api_key:
+    type: "apiKey"
+    name: "key"
+    in: "query"
