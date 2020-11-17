@@ -1,6 +1,17 @@
 window.addEventListener('load', (event) => {
     
     var user = null;
+    var fireConfig = {
+        apiKey: "AIzaSyAt03rshfNV_v5CwfY6hiaALx-GeJ1d1iI",
+        authDomain: "clase-16-11-2020-295816.firebaseapp.com",
+        databaseURL: "https://clase-16-11-2020-295816.firebaseio.com",
+        projectId: "clase-16-11-2020-295816",
+        storageBucket: "clase-16-11-2020-295816.appspot.com",
+        messagingSenderId: "950526179723",
+        appId: "1:950526179723:web:2fd4c733be75ce664fd78e"
+    }
+
+    firebase.initializeApp(fireConfig);
 
     function getData(url) {
         var xmlHttp = new XMLHttpRequest();
@@ -45,12 +56,12 @@ window.addEventListener('load', (event) => {
 
     function goRoute(route) {
         if (route == 'departments') {
-            formDepartmentData();
+            // formDepartmentData();
             document.getElementById('authRoute').style.display = 'none';
             document.getElementById('transactionRoute').style.display = 'none';
             document.getElementById('departmentsRoute').style.display = 'block';
         } else if (route == 'transactions') {
-            formFinanceData();
+            // formFinanceData();
             document.getElementById('authRoute').style.display = 'none';
             document.getElementById('transactionRoute').style.display = 'block';
             document.getElementById('departmentsRoute').style.display = 'none';   
@@ -59,60 +70,23 @@ window.addEventListener('load', (event) => {
 
     function setUID() { document.getElementById('userUID').innerText = user.user.uid; }
 
-    document.getElementById('signInButton').addEventListener('click', () => {
-
-        document.getElementById('messageDisplay').innerHTML = '';
-
-        var xmlHttp = new XMLHttpRequest();
-        xmlHttp.open('POST', 'https://auth-dot-clase-12-11-2020.ew.r.appspot.com/user-signin', true);
-
+    document.getElementById('signInButton').addEventListener('click', async () => {
         const email = document.getElementById('email').value;
         const password = document.getElementById('password').value;
-
-        xmlHttp.setRequestHeader('Content-type', 'application/json');
-
-        xmlHttp.onreadystatechange = function () {
-            const response = JSON.parse(xmlHttp.responseText);
-            if (response.message == 'error occured') {
-                document.getElementById('messageDisplay').innerHTML = response.error.message;
-            }
-            if (xmlHttp.readyState === 4 && xmlHttp.status === 200) {
-                user = response.user;
-                setUID();
-                goRoute('transactions');
-            }
-        }
-
-        const data = JSON.stringify({"email": email, "password": password});
-        xmlHttp.send(data);
+        const result = await firebase.auth().signInWithEmailAndPassword(email, password);
+        user = result.user;
+        setUID();
+        goRoute('finance');
     });
 
-    document.getElementById('registerButton').addEventListener('click', () => {
-
-        document.getElementById('messageDisplay').innerHTML = '';
-
-        var xmlHttp = new XMLHttpRequest();
-        xmlHttp.open('POST', 'https://auth-dot-clase-12-11-2020.ew.r.appspot.com/create-user', true);
-
+    document.getElementById('registerButton').addEventListener('click', async () => {
         const email = document.getElementById('emailReg').value;
         const password = document.getElementById('passwordReg').value;
-
-        xmlHttp.setRequestHeader('Content-type', 'application/json');
-
-        xmlHttp.onreadystatechange = function () {
-            const response = JSON.parse(xmlHttp.responseText);
-            if (response.message == 'error occured') {
-                document.getElementById('messageDisplay').innerHTML = response.error.message;
-            }
-            if (xmlHttp.readyState === 4 && xmlHttp.status === 200) {
-                user = response.user;
-                setUID();
-                goRoute('departments');
-            }
-        }
-
-        const data = JSON.stringify({"email": email, "password": password});
-        xmlHttp.send(data);
+        const result = await firebase.auth().createUserWithEmailAndPassword(email, password);
+        user = result;
+        console.log(user);
+        setUID();
+        goRoute('finance');
     });
 
     document.getElementById('toDepartments').addEventListener('click', () => {
@@ -121,6 +95,27 @@ window.addEventListener('load', (event) => {
 
     document.getElementById('toFinance').addEventListener('click', () => {
         goRoute('transactions');
+    });
+
+    document.getElementById('clickHttpFunctions').addEventListener('click', () => {
+        var xmlHttp = new XMLHttpRequest();
+        xmlHttp.open('POST', 'https://us-central1-clase-16-11-2020-295816.cloudfunctions.net/writeDB', true);
+        xmlHttp.setRequestHeader('Content-type', 'application/json');
+
+        xmlHttp.onreadystatechange = function () {
+            const response = xmlHttp.responseText;
+            if (xmlHttp.readyState === 4 && xmlHttp.status === 200) {
+                console.log(response);
+            }
+        }
+        xmlHttp.send();
+    });
+
+    document.getElementById('clickOnCallFunctions').addEventListener('click', () => {
+        const func = firebase.functions().httpsCallable('writeDbSdk');
+        func({data: 'some stuff'}).then(function (result) {
+            console.log(result);
+        });
     });
 
 });
